@@ -28,7 +28,10 @@ export default function Suggestion({ data }) {
                     />
                   </div>
                   <h5 className="text-lg font-semibold mt-4">{item.title}</h5>
-                  <span className="">IDR {item.price}</span>
+                  <span className="">
+                    IDR{" "}
+                    {item.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")}
+                  </span>
                   <Link
                     to={`/categories/${item.idc}/products/${item.id}`}
                     className="stretched-link"

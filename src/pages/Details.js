@@ -8,6 +8,8 @@ import SiteMap from "../parts/SiteMap";
 import useAsync from "../helpers/hooks/useAsync";
 import fetchData from "../helpers/fetch";
 import { useParams } from "react-router-dom";
+import Document from "../parts/Document";
+import ErrorMessage from "../parts/ErrorMessage";
 
 function LoadingProduct() {
   return (
@@ -99,7 +101,7 @@ function LoadingSuggestion() {
 }
 
 export default function Details() {
-  const { data, run, isLoading } = useAsync();
+  const { data, run, isLoading, isError } = useAsync();
   const { idp } = useParams();
 
   useEffect(() => {
@@ -107,7 +109,7 @@ export default function Details() {
   }, [idp, run]);
 
   return (
-    <>
+    <Document>
       <Header theme="black" />
       <BreadCrumb
         list={[
@@ -117,14 +119,21 @@ export default function Details() {
         ]}
       />
 
-      {isLoading ? <LoadingProduct /> : <ProductDetails data={data} />}
-      {isLoading ? (
-        <LoadingSuggestion />
+      {isError ? (
+        <ErrorMessage />
       ) : (
-        <Suggestion data={data?.relatedProducts} />
+        <>
+          {isLoading ? <LoadingProduct /> : <ProductDetails data={data} />}
+          {isLoading ? (
+            <LoadingSuggestion />
+          ) : (
+            <Suggestion data={data?.relatedProducts} />
+          )}
+        </>
       )}
+
       <SiteMap />
       <Footer />
-    </>
+    </Document>
   );
 }
